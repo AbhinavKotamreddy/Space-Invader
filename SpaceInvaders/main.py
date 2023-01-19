@@ -1,4 +1,5 @@
 import pygame
+import shields
 from pygame import mixer
 from pygame.locals import *
 import random
@@ -27,13 +28,13 @@ font40 = pygame.font.SysFont('Constantia', 40)
 
 
 #load sounds
-explosion_fx = pygame.mixer.Sound("img/explosion.wav")
+explosion_fx = pygame.mixer.Sound("img/explosion-01.wav")
 explosion_fx.set_volume(0.25)
 
-explosion2_fx = pygame.mixer.Sound("img/explosion2.wav")
+explosion2_fx = pygame.mixer.Sound("img/explosion-02.wav")
 explosion2_fx.set_volume(0.25)
 
-laser_fx = pygame.mixer.Sound("img/laser.wav")
+laser_fx = pygame.mixer.Sound("img/laser-01.wav")
 laser_fx.set_volume(0.25)
 
 
@@ -165,7 +166,7 @@ class Aliens(pygame.sprite.Sprite):
 class Alien_Bullets(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
-		self.image = pygame.image.load("img/alien_bullet.png")
+		self.image = pygame.image.load("img/bullet.png")
 		self.rect = self.image.get_rect()
 		self.rect.center = [x, y]
 
@@ -180,7 +181,8 @@ class Alien_Bullets(pygame.sprite.Sprite):
 			spaceship.health_remaining -= 1
 			explosion = Explosion(self.rect.centerx, self.rect.centery, 1)
 			explosion_group.add(explosion)
-
+	
+	
 
 
 
@@ -189,7 +191,7 @@ class Explosion(pygame.sprite.Sprite):
 	def __init__(self, x, y, size):
 		pygame.sprite.Sprite.__init__(self)
 		self.images = []
-		for num in range(1, 6):
+		for num in range(1, 2):
 			img = pygame.image.load(f"img/exp{num}.png")
 			if size == 1:
 				img = pygame.transform.scale(img, (20, 20))
@@ -219,8 +221,6 @@ class Explosion(pygame.sprite.Sprite):
 		#if the animation is complete, delete explosion
 		if self.index >= len(self.images) - 1 and self.counter >= explosion_speed:
 			self.kill()
-
-
 
 
 #create sprite groups
