@@ -134,7 +134,12 @@ class Bullets(pygame.sprite.Sprite):
 		self.rect.y -= 5
 		if self.rect.bottom < 0:
 			self.kill()
-		if pygame.sprite.spritecollide(self, alien_group, True):
+		if pygame.sprite.spritecollide(self, alien_group, True): 
+			self.kill()
+			explosion_fx.play()
+			explosion = Explosion(self.rect.centerx, self.rect.centery, 2)
+			explosion_group.add(explosion)
+		if pygame.sprite.spritecollide(self, shield_group, False):
 			self.kill()
 			explosion_fx.play()
 			explosion = Explosion(self.rect.centerx, self.rect.centery, 2)
@@ -169,19 +174,23 @@ class Alien_Bullets(pygame.sprite.Sprite):
 		self.image = pygame.image.load("img/bullet.png")
 		self.rect = self.image.get_rect()
 		self.rect.center = [x, y]
-
+	
 	def update(self):
 		self.rect.y += 2
 		if self.rect.top > screen_height:
 			self.kill()
-		if pygame.sprite.spritecollide(self, spaceship_group, False, pygame.sprite.collide_mask):
+		if pygame.sprite.spritecollide(self, spaceship_group,  False, pygame.sprite.collide_mask):
 			self.kill()
 			explosion2_fx.play()
 			#reduce spaceship health
 			spaceship.health_remaining -= 1
 			explosion = Explosion(self.rect.centerx, self.rect.centery, 1)
 			explosion_group.add(explosion)
-	
+		if pygame.sprite.spritecollide(self, shield_group, False):
+			self.kill()
+			explosion_fx.play()
+			explosion = Explosion(self.rect.centerx, self.rect.centery, 2)
+			explosion_group.add(explosion)
 	
 
 
@@ -222,11 +231,13 @@ class Explosion(pygame.sprite.Sprite):
 		if self.index >= len(self.images) - 1 and self.counter >= explosion_speed:
 			self.kill()
 class Shield(pygame.sprite.Sprite):
-	def __init__(self, x, y):
+	def __init__(self, x, y, health):
 		pygame.sprite.Sprite.__init__(self)
 		self.image = pygame.image.load("img/shield.png")
 		self.rect = self.image.get_rect()
-		self.rect.center = [x, y]d
+		self.rect.center = [x, y]
+		self.health_start = health
+		self.health_remaining = health
 	def update(self):
 		self.rect.y += 2
 		if self.rect.top > screen_height:
@@ -234,10 +245,14 @@ class Shield(pygame.sprite.Sprite):
 		if pygame.sprite.spritecollide(self, shield_group, False, pygame.sprite.collide_mask):
 			self.kill()
 			explosion2_fx.play()
-			#reduce shield health
-			shield.health_remaining -= 1
-			explosion = Explosion(self.rect.centerx, self.rect.centery, 1)
+			#draw health bar
+		pygame.draw.rect(screen, red, (self.rect.x, (self.rect.bottom + 10), self.rect.width, 15))
+		if self.health_remaining > 0:
+			pygame.draw.rect(screen, green, (self.rect.x, (self.rect.bottom + 10), int(self.rect.width * (self.health_remaining / self.health_start)), 15))
+		elif self.health_remaining <= 0:
+			explosion = Explosion(self.rect.centerx, self.rect.centery, 3)
 			explosion_group.add(explosion)
+			self.kill()
 
 #create sprite groups
 spaceship_group = pygame.sprite.Group()
@@ -249,8 +264,10 @@ shield_group = pygame.sprite.Group()
 
 def create_shields():
 	#generate shields
-	shield = Shield(int(screen_width / 2), screen_height - 100, 3)
-	shield_group.add(shield)
+	for row in range(1):
+		for item in range(3):
+			shield = Shield(100 + item * 100, 100 + row * 70)
+			shield_group.add(shield)
 def create_aliens():
 	#generate aliens
 	for row in range(rows):
@@ -259,6 +276,7 @@ def create_aliens():
 			alien_group.add(alien)
 
 create_aliens()
+create_shields()
 
 
 #create player
@@ -324,6 +342,8 @@ while run:
 	alien_group.draw(screen)
 	alien_bullet_group.draw(screen)
 	explosion_group.draw(screen)
+	shield_group.draw(screen)
+
 
 
 	#event handlers
