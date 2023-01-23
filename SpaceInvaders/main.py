@@ -1,5 +1,4 @@
 import pygame
-import shields
 from pygame import mixer
 from pygame.locals import *
 import random
