@@ -81,7 +81,7 @@ class Spaceship(pygame.sprite.Sprite):
 
 	def update(self):
 		#set movement speed
-		speed = 8
+		speed = 10
 		#set a cooldown variable
 		cooldown = 350 #milliseconds
 		game_over = 0
