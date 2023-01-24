@@ -2,7 +2,11 @@ import pygame
 from pygame import mixer
 from pygame.locals import *
 import random
-
+''' Author: Abhinav Kotamreddy
+Assignment: Space Invaders
+Description: An arcade shooter game where you shoot aliens flying above you. I added shields to the game to add some protection from enemy bullets.
+The other code used comes from Coding With Russ.
+'''
 
 pygame.mixer.pre_init(44100, -16, 2, 512)
 mixer.init()
