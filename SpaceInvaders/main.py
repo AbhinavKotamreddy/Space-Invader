@@ -272,7 +272,7 @@ create_aliens()
 spaceship = Spaceship(int(screen_width / 2), screen_height - 100, 3)
 spaceship_group.add(spaceship)
 
-#create shields
+#create shields and position them
 shield = Shield(int(screen_width / 2), screen_height - 250, )
 shield1 = Shield(int(screen_width / 5), screen_height - 250, )
 shield2 = Shield(int(screen_width / 1.25), screen_height - 250, )
