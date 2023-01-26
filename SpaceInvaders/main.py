@@ -233,6 +233,7 @@ class Explosion(pygame.sprite.Sprite):
 		#if the animation is complete, delete explosion
 		if self.index >= len(self.images) - 1 and self.counter >= explosion_speed:
 			self.kill()
+#create Shield class
 class Shield(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
